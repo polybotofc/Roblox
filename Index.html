@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Profile Search</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f3f3f3, #ffafbd);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 400px;
+            text-align: center;
+        }
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 20px;
+            border: 5px solid #ffafbd;
+        }
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+        .stats div {
+            width: 50%;
+            text-align: center;
+        }
+        .stats div p {
+            font-size: 18px;
+            color: #333;
+            margin: 5px 0;
+        }
+        .btn {
+            background: #ffafbd;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #ff6b6b;
+        }
+        .footer {
+            margin-top: 20px;
+        }
+        .footer a {
+            color: #ff6b6b;
+            text-decoration: none;
+        }
+        #searchForm {
+            margin-bottom: 20px;
+        }
+        #searchForm input {
+            width: 80%;
+            padding: 10px;
+            border: 2px solid #ffafbd;
+            border-radius: 25px;
+            font-size: 16px;
+            margin-right: 5px;
+        }
+        #searchForm button {
+            padding: 10px 20px;
+            background: #ff6b6b;
+            border: none;
+            color: #fff;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Form Pencarian Username Roblox -->
+    <form id="searchForm">
+        <input type="text" id="usernameInput" placeholder="Cari Username Roblox" required>
+        <button type="submit">Cari</button>
+    </form>
+    
+    <!-- Foto Profil Roblox -->
+    <div class="profile-pic">
+        <img id="profileImage" src="https://www.roblox.com/headshot-thumbnail/image?userId=1&width=420&height=420&format=png" alt="Roblox Profile Picture">
+    </div>
+    
+    <!-- Nama Profil -->
+    <h1 id="username">Username</h1>
+    
+    <!-- Stats: Jumlah Teman dan Pengikut -->
+    <div class="stats">
+        <div>
+            <p>Teman</p>
+            <p id="friendsCount">0</p>
+        </div>
+        <div>
+            <p>Pengikut</p>
+            <p id="followersCount">0</p>
+        </div>
+    </div>
+
+    <!-- Tombol Visit Profil -->
+    <a id="profileLink" href="#" class="btn">Kunjungi Profil</a>
+</div>
+
+<script>
+    async function getRobloxProfileByUsername(username) {
+        try {
+            // Fetch Roblox User Info by Username
+            const response = await fetch(`https://users.roblox.com/v1/users/search?keyword=${username}`);
+            const data = await response.json();
+            
+            // Ambil userId dari hasil pencarian pertama
+            const userId = data.data[0].id;
+
+            // Dapatkan profil pengguna berdasarkan userId
+            getRobloxProfile(userId);
+        } catch (error) {
+            console.error("Error fetching Roblox username data: ", error);
+        }
+    }
+
+    async function getRobloxProfile(userId) {
+        try {
+            // Fetch Roblox User Info
+            const response = await fetch(`https://users.roblox.com/v1/users/${userId}`);
+            const userData = await response.json();
+
+            // Update Username and Profile Image
+            document.getElementById('username').innerText = userData.name;
+            document.getElementById('profileImage').src = `https://www.roblox.com/headshot-thumbnail/image?userId=${userId}&width=420&height=420&format=png`;
+            document.getElementById('profileLink').href = `https://www.roblox.com/users/${userId}/profile`;
+
+            // Fetch Friends Count
+            const friendsResponse = await fetch(`https://friends.roblox.com/v1/users/${userId}/friends/count`);
+            const friendsData = await friendsResponse.json();
+            document.getElementById('friendsCount').innerText = friendsData.count;
+
+            // Fetch Followers Count
+            const followersResponse = await fetch(`https://friends.roblox.com/v1/users/${userId}/followers/count`);
+            const followersData = await followersResponse.json();
+            document.getElementById('followersCount').innerText = followersData.count;
+        } catch (error) {
+            console.error("Error fetching Roblox data: ", error);
+        }
+    }
+
+    document.getElementById('searchForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const username = document.getElementById('usernameInput').value;
+        getRobloxProfileByUsername(username);
+    });
+
+    // Fetch default profile
+    getRobloxProfile(1);  // Replace '1' with a default userId or leave it as the first load
+</script>
+
+</body>
+</html>
