@@ -53,17 +53,20 @@
               <div style="display:flex;gap:4px;flex-wrap:wrap">
                 <% if (!u.is_banned && u.role !== 'owner') { %>
                   <form method="POST" action="/admin/ban/<%= u.id %>" style="display:inline">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <input type="hidden" name="reason" value="Banned by admin">
                     <button type="submit" class="btn btn-red btn-sm" onclick="return confirm('Ban this user?')">Ban</button>
                   </form>
                 <% } %>
                 <% if (u.is_banned) { %>
                   <form method="POST" action="/admin/unban/<%= u.id %>" style="display:inline">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="submit" class="btn btn-green btn-sm">Unban</button>
                   </form>
                 <% } %>
                 <% if (user.role === 'owner' && u.id !== user.id) { %>
                   <form method="POST" action="/admin/role/<%= u.id %>" style="display:inline">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <select name="role" class="form-input" style="width:auto;padding:4px 6px;font-size:11px">
                       <option value="user" <%= u.role === 'user' ? 'selected' : '' %>>User</option>
                       <option value="moderator" <%= u.role === 'moderator' ? 'selected' : '' %>>Mod</option>

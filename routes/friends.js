@@ -5,7 +5,7 @@ const { requireLogin } = require('../middleware/auth');
 module.exports = function (csrfProtection) {
   const router = express.Router();
 
-  router.get('/', requireLogin, (req, res) => {
+  router.get('/', requireLogin, csrfProtection, (req, res) => {
     const db = getDb();
     const userId = req.session.user.id;
 
@@ -27,7 +27,7 @@ module.exports = function (csrfProtection) {
       WHERE fr.from_user_id = ? AND fr.status = 'pending'
     `).all(userId);
 
-    res.render('friends', { title: 'Friends', friends, requests, sentRequests, csrfToken: '' });
+    res.render('friends', { title: 'Friends', friends, requests, sentRequests, csrfToken: req.csrfToken() });
   });
 
   router.post('/request/:userId', requireLogin, csrfProtection, (req, res) => {

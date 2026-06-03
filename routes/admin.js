@@ -20,7 +20,7 @@ module.exports = function (csrfProtection) {
     });
   });
 
-  router.get('/users', requireRole(adminRoles), (req, res) => {
+  router.get('/users', requireRole(adminRoles), csrfProtection, (req, res) => {
     const db = getDb();
     const page = parseInt(req.query.page) || 1;
     const limit = 20;
@@ -37,7 +37,7 @@ module.exports = function (csrfProtection) {
     }
     const totalPages = Math.ceil(totalUsers / limit);
 
-    res.render('admin/users', { title: 'Manage Users', users, page, totalPages, search, csrfToken: '' });
+    res.render('admin/users', { title: 'Manage Users', users, page, totalPages, search, csrfToken: req.csrfToken() });
   });
 
   router.post('/ban/:userId', requireRole(['administrator', 'owner']), csrfProtection, (req, res) => {

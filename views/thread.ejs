@@ -39,6 +39,7 @@
               <% } %>
               <% if (user && (post.user_id === user.id || ['moderator','administrator','owner'].includes(user.role))) { %>
                 <form method="POST" action="/forum/delete-post/<%= post.id %>" style="display:inline">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                   <button type="submit" class="btn btn-red btn-sm" onclick="return confirm('Delete this post?')">Delete</button>
                 </form>
               <% } %>
@@ -52,6 +53,7 @@
       <div class="reply-form">
         <h3>Reply</h3>
         <form method="POST" action="/forum/reply/<%= thread.id %>">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <input type="hidden" name="quote_post_id" id="quotePostId" value="">
           <textarea name="body" class="reply-textarea" placeholder="Write your reply..." required></textarea>
           <button type="submit" class="btn btn-primary">Post Reply</button>

@@ -5,7 +5,7 @@ const { requireLogin } = require('../middleware/auth');
 module.exports = function (csrfProtection) {
   const router = express.Router();
 
-  router.get('/:username', async (req, res) => {
+  router.get('/:username', csrfProtection, async (req, res) => {
     const db = getDb();
     const user = db.prepare('SELECT * FROM users WHERE username = ?').get(req.params.username);
     if (!user) {
@@ -41,7 +41,8 @@ module.exports = function (csrfProtection) {
       friends,
       isFriend,
       hasPendingRequest,
-      hasReceivedRequest
+      hasReceivedRequest,
+      csrfToken: req.csrfToken()
     });
   });
 

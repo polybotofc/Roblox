@@ -10,7 +10,7 @@ module.exports = function (csrfProtection) {
     res.redirect('/messages/inbox');
   });
 
-  router.get('/inbox', requireLogin, (req, res) => {
+  router.get('/inbox', requireLogin, csrfProtection, (req, res) => {
     const db = getDb();
     const messages = db.prepare(`
       SELECT m.*, u.username as from_username, u.roblox_avatar_url as from_avatar
@@ -19,10 +19,10 @@ module.exports = function (csrfProtection) {
       ORDER BY m.created_at DESC
     `).all(req.session.user.id);
 
-    res.render('messages', { title: 'Inbox', messages, tab: 'inbox', csrfToken: '' });
+    res.render('messages', { title: 'Inbox', messages, tab: 'inbox', csrfToken: req.csrfToken() });
   });
 
-  router.get('/sent', requireLogin, (req, res) => {
+  router.get('/sent', requireLogin, csrfProtection, (req, res) => {
     const db = getDb();
     const messages = db.prepare(`
       SELECT m.*, u.username as to_username, u.roblox_avatar_url as to_avatar
@@ -31,7 +31,7 @@ module.exports = function (csrfProtection) {
       ORDER BY m.created_at DESC
     `).all(req.session.user.id);
 
-    res.render('messages', { title: 'Sent Messages', messages, tab: 'sent', csrfToken: '' });
+    res.render('messages', { title: 'Sent Messages', messages, tab: 'sent', csrfToken: req.csrfToken() });
   });
 
   router.get('/compose', requireLogin, csrfProtection, (req, res) => {
@@ -59,7 +59,7 @@ module.exports = function (csrfProtection) {
     res.redirect('/messages/sent');
   });
 
-  router.get('/view/:id', requireLogin, (req, res) => {
+  router.get('/view/:id', requireLogin, csrfProtection, (req, res) => {
     const db = getDb();
     const msg = db.prepare(`
       SELECT m.*, 
@@ -77,7 +77,7 @@ module.exports = function (csrfProtection) {
       db.prepare('UPDATE messages SET is_read = 1 WHERE id = ?').run(msg.id);
     }
 
-    res.render('view-message', { title: msg.subject, msg });
+    res.render('view-message', { title: msg.subject, msg, csrfToken: req.csrfToken() });
   });
 
   router.post('/delete/:id', requireLogin, csrfProtection, (req, res) => {

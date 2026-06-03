@@ -42,7 +42,7 @@ module.exports = function (csrfProtection) {
     res.render('forum-category', { title: category.name, category, threads, page, totalPages, csrfToken: '' });
   });
 
-  router.get('/thread/:id', (req, res) => {
+  router.get('/thread/:id', csrfProtection, (req, res) => {
     const db = getDb();
     const thread = db.prepare(`
       SELECT t.*, u.username, u.roblox_avatar_url, fc.name as category_name, fc.slug as category_slug
@@ -65,7 +65,7 @@ module.exports = function (csrfProtection) {
       ORDER BY p.created_at ASC
     `).all(thread.id);
 
-    res.render('thread', { title: thread.title, thread, posts, csrfToken: '' });
+    res.render('thread', { title: thread.title, thread, posts, csrfToken: req.csrfToken() });
   });
 
   router.get('/new/:slug', requireLogin, csrfProtection, (req, res) => {

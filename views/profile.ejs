@@ -24,6 +24,7 @@
           <div class="profile-actions">
             <% if (isFriend) { %>
               <form method="POST" action="/friends/remove/<%= profileUser.id %>" style="display:inline">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <button type="submit" class="btn btn-red btn-sm">Unfriend</button>
               </form>
             <% } else if (hasPendingRequest) { %>
@@ -32,6 +33,7 @@
               <span class="btn btn-gray btn-sm" style="cursor:default">Pending Request</span>
             <% } else { %>
               <form method="POST" action="/friends/request/<%= profileUser.id %>" style="display:inline">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <button type="submit" class="btn btn-primary btn-sm">Add Friend</button>
               </form>
             <% } %>

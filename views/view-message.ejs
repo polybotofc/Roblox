@@ -7,6 +7,7 @@
       <div class="message-view-header">
         <h1 class="message-view-subject"><%= msg.subject %></h1>
         <form method="POST" action="/messages/delete/<%= msg.id %>" style="display:inline">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <button type="submit" class="btn btn-red btn-sm">Delete</button>
         </form>
       </div>

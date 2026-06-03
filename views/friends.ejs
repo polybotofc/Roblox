@@ -15,9 +15,11 @@
             <a href="/profile/<%= req.username %>" class="request-name"><%= req.username %></a>
             <div class="request-actions">
               <form method="POST" action="/friends/accept/<%= req.id %>" style="display:inline">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <button type="submit" class="btn btn-green btn-sm">Accept</button>
               </form>
               <form method="POST" action="/friends/decline/<%= req.id %>" style="display:inline">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <button type="submit" class="btn btn-red btn-sm">Decline</button>
               </form>
             </div>
@@ -52,6 +54,7 @@
                 <div class="friend-card-name"><%= friend.username %></div>
               </a>
               <form method="POST" action="/friends/remove/<%= friend.id %>" style="margin-top:4px">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <button type="submit" class="btn btn-red btn-sm">Remove</button>
               </form>
             </div>
