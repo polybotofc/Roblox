@@ -56,6 +56,7 @@ const newsRoutes = require('./routes/news');
 const searchRoutes = require('./routes/search');
 const settingsRoutes = require('./routes/settings');
 const adminRoutes = require('./routes/admin');
+const avatarRoutes = require('./routes/avatar');
 
 app.use('/', homeRoutes);
 app.use('/auth', authRoutes(csrfProtection, loginLimiter));
@@ -68,6 +69,7 @@ app.use('/news', newsRoutes(csrfProtection));
 app.use('/search', searchRoutes);
 app.use('/settings', settingsRoutes(csrfProtection));
 app.use('/admin', adminRoutes(csrfProtection));
+app.use('/avatar', avatarRoutes(csrfProtection));
 
 app.use((err, req, res, next) => {
   if (err.code === 'EBADCSRFTOKEN') {

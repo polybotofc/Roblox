@@ -1,0 +1,102 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="avatar-page">
+    <h1 class="section-title" style="margin-bottom:16px">My Avatar</h1>
+
+    <div class="avatar-container">
+      <div class="avatar-preview">
+        <div class="avatar-tabs">
+          <button class="avatar-tab active" data-view="fullBody">Full Body</button>
+          <button class="avatar-tab" data-view="bust">Bust</button>
+          <button class="avatar-tab" data-view="headshot">Headshot</button>
+        </div>
+        <div class="avatar-render-area">
+          <% if (avatarDetails) { %>
+            <img id="avatarFullBody" src="<%= avatarDetails.fullBody || avatarDetails.headshot %>" alt="Full Body" class="avatar-render-img active">
+            <img id="avatarBust" src="<%= avatarDetails.bust || avatarDetails.headshot %>" alt="Bust" class="avatar-render-img" style="display:none">
+            <img id="avatarHeadshot" src="<%= avatarDetails.headshot %>" alt="Headshot" class="avatar-render-img" style="display:none">
+          <% } else { %>
+            <div class="empty-state"><p>Could not load avatar.</p></div>
+          <% } %>
+        </div>
+        <div class="avatar-info-bar">
+          <span>Roblox User: <strong><%= robloxUsername %></strong></span>
+          <span>ID: <strong><%= robloxUserId %></strong></span>
+        </div>
+        <form method="POST" action="/avatar/refresh" style="margin-top:12px">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <button type="submit" class="btn btn-primary btn-sm">Refresh Avatar</button>
+        </form>
+      </div>
+
+      <div class="avatar-details">
+        <% if (avatarDetails && avatarDetails.colors) { %>
+          <div class="avatar-section">
+            <h3 class="avatar-section-title">Body Colors</h3>
+            <div class="color-grid">
+              <div class="color-item">
+                <div class="color-swatch" style="background-color: rgb(<%= avatarDetails.colors.headColorId || 0 %>, <%= avatarDetails.colors.headColorId || 0 %>, <%= avatarDetails.colors.headColorId || 0 %>)"></div>
+                <span>Head</span>
+              </div>
+              <div class="color-item">
+                <div class="color-swatch" style="background-color: rgb(<%= avatarDetails.colors.torsoColorId || 0 %>, <%= avatarDetails.colors.torsoColorId || 0 %>, <%= avatarDetails.colors.torsoColorId || 0 %>)"></div>
+                <span>Torso</span>
+              </div>
+              <div class="color-item">
+                <div class="color-swatch" style="background-color: rgb(<%= avatarDetails.colors.leftArmColorId || 0 %>, <%= avatarDetails.colors.leftArmColorId || 0 %>, <%= avatarDetails.colors.leftArmColorId || 0 %>)"></div>
+                <span>Left Arm</span>
+              </div>
+              <div class="color-item">
+                <div class="color-swatch" style="background-color: rgb(<%= avatarDetails.colors.rightArmColorId || 0 %>, <%= avatarDetails.colors.rightArmColorId || 0 %>, <%= avatarDetails.colors.rightArmColorId || 0 %>)"></div>
+                <span>Right Arm</span>
+              </div>
+              <div class="color-item">
+                <div class="color-swatch" style="background-color: rgb(<%= avatarDetails.colors.leftLegColorId || 0 %>, <%= avatarDetails.colors.leftLegColorId || 0 %>, <%= avatarDetails.colors.leftLegColorId || 0 %>)"></div>
+                <span>Left Leg</span>
+              </div>
+              <div class="color-item">
+                <div class="color-swatch" style="background-color: rgb(<%= avatarDetails.colors.rightLegColorId || 0 %>, <%= avatarDetails.colors.rightLegColorId || 0 %>, <%= avatarDetails.colors.rightLegColorId || 0 %>)"></div>
+                <span>Right Leg</span>
+              </div>
+            </div>
+          </div>
+        <% } %>
+
+        <% if (assetDetails.length > 0) { %>
+          <div class="avatar-section">
+            <h3 class="avatar-section-title">Currently Wearing (<%= assetDetails.length %> items)</h3>
+            <div class="wearing-grid">
+              <% assetDetails.forEach(function(asset) { %>
+                <a href="https://www.roblox.com/catalog/<%= asset.id %>" target="_blank" class="wearing-item">
+                  <img src="<%= asset.imageUrl %>" alt="Asset <%= asset.id %>" class="wearing-item-img">
+                </a>
+              <% }); %>
+            </div>
+          </div>
+        <% } else { %>
+          <div class="avatar-section">
+            <h3 class="avatar-section-title">Currently Wearing</h3>
+            <div class="empty-state"><p>No items data available.</p></div>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.avatar-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.avatar-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.avatar-render-img').forEach(function(img) { img.style.display = 'none'; img.classList.remove('active'); });
+    this.classList.add('active');
+    var view = this.getAttribute('data-view');
+    var img = document.getElementById('avatar' + view.charAt(0).toUpperCase() + view.slice(1));
+    if (img) { img.style.display = 'block'; img.classList.add('active'); }
+  });
+});
+</script>
+
+<%- include('partials/footer') %>
