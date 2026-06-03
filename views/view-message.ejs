@@ -1,0 +1,27 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="messages-page">
+    <div class="message-view">
+      <div class="message-view-header">
+        <h1 class="message-view-subject"><%= msg.subject %></h1>
+        <form method="POST" action="/messages/delete/<%= msg.id %>" style="display:inline">
+          <button type="submit" class="btn btn-red btn-sm">Delete</button>
+        </form>
+      </div>
+      <div class="message-view-meta">
+        <strong>From:</strong> <a href="/profile/<%= msg.from_username %>"><%= msg.from_username %></a>
+        &middot; <strong>To:</strong> <a href="/profile/<%= msg.to_username %>"><%= msg.to_username %></a>
+        &middot; <%= new Date(msg.created_at).toLocaleString() %>
+      </div>
+      <div class="message-view-body"><%= msg.body %></div>
+      <div style="margin-top:20px">
+        <a href="/messages/compose?to=<%= msg.from_username %>" class="btn btn-primary btn-sm">Reply</a>
+        <a href="/messages/inbox" class="btn btn-outline btn-sm" style="margin-left:8px">Back to Inbox</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

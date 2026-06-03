@@ -1,0 +1,43 @@
+<%- include('../partials/head') %>
+<%- include('../partials/navbar') %>
+
+<div class="main-content">
+  <div class="admin-page">
+    <div class="admin-header">
+      <h1>Admin Dashboard</h1>
+      <p>Welcome back, <%= user.username %>. Role: <%= user.role %></p>
+    </div>
+
+    <div class="admin-nav">
+      <a href="/admin">Dashboard</a>
+      <a href="/admin/users">Manage Users</a>
+      <a href="/news/create">Create News</a>
+      <a href="/forum">Forum</a>
+    </div>
+
+    <div class="admin-stats-grid">
+      <div class="admin-stat-card">
+        <div class="admin-stat-value"><%= stats.users %></div>
+        <div class="admin-stat-label">Total Users</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="admin-stat-value"><%= stats.threads %></div>
+        <div class="admin-stat-label">Forum Threads</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="admin-stat-value"><%= stats.posts %></div>
+        <div class="admin-stat-label">Forum Posts</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="admin-stat-value"><%= stats.banned %></div>
+        <div class="admin-stat-label">Banned Users</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="admin-stat-value"><%= stats.news %></div>
+        <div class="admin-stat-label">News Articles</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

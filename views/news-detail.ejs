@@ -1,0 +1,30 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="news-page">
+    <div style="font-size:12px;color:#898989;margin-bottom:16px">
+      <a href="/news">News</a> &raquo; <%= article.title %>
+    </div>
+
+    <div class="news-detail">
+      <span class="news-item-badge badge-<%= article.category %>" style="margin-bottom:12px;display:inline-block"><%= article.category %></span>
+      <h1 class="news-detail-title"><%= article.title %></h1>
+      <div class="news-detail-meta">
+        by <%= article.username %> &middot; <%= new Date(article.created_at).toLocaleString() %>
+        <% if (article.updated_at !== article.created_at) { %>
+          &middot; Updated: <%= new Date(article.updated_at).toLocaleString() %>
+        <% } %>
+      </div>
+      <div class="news-detail-body"><%= article.body %></div>
+    </div>
+
+    <% if (user && ['administrator','owner'].includes(user.role)) { %>
+      <div style="margin-top:16px">
+        <a href="/news/edit/<%= article.id %>" class="btn btn-primary btn-sm">Edit</a>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

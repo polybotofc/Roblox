@@ -1,0 +1,36 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="compose-page">
+    <h1 class="section-title" style="margin-bottom:16px">Compose Message</h1>
+
+    <div class="settings-section">
+      <% if (errors.length > 0) { %>
+        <% errors.forEach(function(err) { %>
+          <div class="alert alert-error"><%= err.msg %></div>
+        <% }); %>
+      <% } %>
+
+      <form method="POST" action="/messages/compose">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="form-group">
+          <label class="form-label">To</label>
+          <input type="text" name="to" class="form-input" placeholder="Username" value="<%= toUser || old.to || '' %>" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subject</label>
+          <input type="text" name="subject" class="form-input" placeholder="Subject" value="<%= old.subject || '' %>" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea name="body" class="reply-textarea" placeholder="Write your message..." required><%= old.body || '' %></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+        <a href="/messages/inbox" class="btn btn-outline" style="margin-left:8px">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

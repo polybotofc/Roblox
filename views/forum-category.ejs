@@ -1,0 +1,52 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="forum-page">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div>
+        <h1 class="section-title"><%= category.name %></h1>
+        <p style="font-size:13px;color:#898989"><%= category.description %></p>
+      </div>
+      <% if (user) { %>
+        <a href="/forum/new/<%= category.slug %>" class="btn btn-primary btn-sm">New Thread</a>
+      <% } %>
+    </div>
+
+    <% if (threads.length > 0) { %>
+      <div class="thread-list">
+        <% threads.forEach(function(thread) { %>
+          <a href="/forum/thread/<%= thread.id %>" class="thread-item">
+            <img src="<%= thread.roblox_avatar_url %>" alt="" class="thread-avatar">
+            <div class="thread-info">
+              <div class="thread-title-text">
+                <% if (thread.is_pinned) { %><span class="pinned-badge">PINNED</span><% } %>
+                <%= thread.title %>
+              </div>
+              <div class="thread-meta">by <%= thread.username %> &middot; <%= new Date(thread.created_at).toLocaleDateString() %></div>
+            </div>
+            <div class="thread-stats">
+              <div><strong><%= thread.reply_count %></strong> Replies</div>
+              <div><strong><%= thread.views %></strong> Views</div>
+            </div>
+          </a>
+        <% }); %>
+      </div>
+
+      <% if (totalPages > 1) { %>
+        <div class="pagination">
+          <% for (var i = 1; i <= totalPages; i++) { %>
+            <a href="/forum/category/<%= category.slug %>?page=<%= i %>" class="<%= i === page ? 'active' : '' %>"><%= i %></a>
+          <% } %>
+        </div>
+      <% } %>
+    <% } else { %>
+      <div class="empty-state">
+        <h3>No threads yet</h3>
+        <p>Be the first to start a conversation!</p>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

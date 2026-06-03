@@ -1,0 +1,40 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="games-page">
+    <h1 class="section-title" style="margin-bottom:16px">Games</h1>
+
+    <div class="games-tabs">
+      <a href="/games?category=popular" class="games-tab <%= category === 'popular' ? 'active' : '' %>">Popular</a>
+      <a href="/games?category=featured" class="games-tab <%= category === 'featured' ? 'active' : '' %>">Featured</a>
+    </div>
+
+    <% if (games.length > 0) { %>
+      <div class="games-grid">
+        <% games.forEach(function(game) { %>
+          <div class="game-card">
+            <a href="/games/detail/<%= game.universeId %>" class="game-card-link">
+              <img src="<%= game.thumbnailUrl %>" alt="<%= game.name %>" class="game-card-thumb" loading="lazy" onerror="this.src='/images/game-placeholder.png'">
+              <div class="game-card-info">
+                <div class="game-card-name"><%= game.name %></div>
+                <div class="game-card-creator"><%= game.creatorName %></div>
+                <div class="game-card-players">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
+                  <span data-format-number><%= game.playing %></span> Playing
+                </div>
+              </div>
+            </a>
+          </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <div class="empty-state">
+        <h3>No games found</h3>
+        <p>Try again later or search for a specific game.</p>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

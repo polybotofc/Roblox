@@ -1,0 +1,74 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="profile-page">
+    <div class="profile-header">
+      <img src="<%= profileUser.roblox_avatar_url %>" alt="<%= profileUser.username %>" class="profile-avatar">
+      <div class="profile-info">
+        <h1 class="profile-username"><%= profileUser.username %></h1>
+        <div class="profile-roblox-name">Roblox: @<%= profileUser.roblox_username %></div>
+        <% if (profile.bio) { %>
+          <p class="profile-bio"><%= profile.bio %></p>
+        <% } %>
+        <div class="profile-meta">
+          <div class="profile-meta-item"><strong><%= friendCount %></strong> Friends</div>
+          <div class="profile-meta-item">Joined <strong><%= new Date(profileUser.created_at).toLocaleDateString() %></strong></div>
+          <div class="profile-meta-item">Last Online <strong><%= new Date(profileUser.last_online).toLocaleDateString() %></strong></div>
+          <% if (profile.favorite_game) { %>
+            <div class="profile-meta-item">Favorite: <strong><%= profile.favorite_game %></strong></div>
+          <% } %>
+        </div>
+
+        <% if (user && user.id !== profileUser.id) { %>
+          <div class="profile-actions">
+            <% if (isFriend) { %>
+              <form method="POST" action="/friends/remove/<%= profileUser.id %>" style="display:inline">
+                <button type="submit" class="btn btn-red btn-sm">Unfriend</button>
+              </form>
+            <% } else if (hasPendingRequest) { %>
+              <span class="btn btn-gray btn-sm" style="cursor:default">Request Sent</span>
+            <% } else if (hasReceivedRequest) { %>
+              <span class="btn btn-gray btn-sm" style="cursor:default">Pending Request</span>
+            <% } else { %>
+              <form method="POST" action="/friends/request/<%= profileUser.id %>" style="display:inline">
+                <button type="submit" class="btn btn-primary btn-sm">Add Friend</button>
+              </form>
+            <% } %>
+            <a href="/messages/compose?to=<%= profileUser.username %>" class="btn btn-outline btn-sm">Message</a>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="profile-body">
+      <div>
+        <% if (profile.bio) { %>
+          <div class="profile-section">
+            <h3 class="profile-section-title">About</h3>
+            <p style="font-size:14px;line-height:1.6"><%= profile.bio %></p>
+          </div>
+        <% } %>
+      </div>
+      <div>
+        <div class="profile-section">
+          <h3 class="profile-section-title">Friends (<%= friendCount %>)</h3>
+          <% if (friends.length > 0) { %>
+            <div class="friends-grid">
+              <% friends.forEach(function(friend) { %>
+                <a href="/profile/<%= friend.username %>" class="friend-card">
+                  <img src="<%= friend.roblox_avatar_url %>" alt="<%= friend.username %>" class="friend-card-avatar">
+                  <div class="friend-card-name"><%= friend.username %></div>
+                </a>
+              <% }); %>
+            </div>
+          <% } else { %>
+            <div class="empty-state"><p>No friends yet.</p></div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

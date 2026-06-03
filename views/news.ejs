@@ -1,0 +1,43 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="news-page">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h1 class="section-title">News</h1>
+      <% if (user && ['administrator','owner'].includes(user.role)) { %>
+        <a href="/news/create" class="btn btn-primary btn-sm">Create News</a>
+      <% } %>
+    </div>
+
+    <div class="news-tabs">
+      <a href="/news" class="games-tab <%= !category ? 'active' : '' %>">All</a>
+      <a href="/news?category=announcement" class="games-tab <%= category === 'announcement' ? 'active' : '' %>">Announcements</a>
+      <a href="/news?category=event" class="games-tab <%= category === 'event' ? 'active' : '' %>">Events</a>
+      <a href="/news?category=update" class="games-tab <%= category === 'update' ? 'active' : '' %>">Updates</a>
+      <a href="/news?category=maintenance" class="games-tab <%= category === 'maintenance' ? 'active' : '' %>">Maintenance</a>
+    </div>
+
+    <% if (news.length > 0) { %>
+      <div class="news-article-list">
+        <% news.forEach(function(item) { %>
+          <a href="/news/view/<%= item.id %>" class="news-article-card">
+            <div class="news-article-top">
+              <span class="news-item-badge badge-<%= item.category %>"><%= item.category %></span>
+              <span class="news-article-title"><%= item.title %></span>
+            </div>
+            <div class="news-article-body-preview"><%= item.body.substring(0, 200) %><%= item.body.length > 200 ? '...' : '' %></div>
+            <div class="news-article-date">by <%= item.username %> &middot; <%= new Date(item.created_at).toLocaleDateString() %></div>
+          </a>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <div class="empty-state">
+        <h3>No news articles</h3>
+        <p>Check back later for updates!</p>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
