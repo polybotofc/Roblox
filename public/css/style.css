@@ -1358,3 +1358,65 @@ img { max-width: 100%; height: auto; }
 }
 .mobile-search form { display: flex; }
 .mobile-search .search-input { flex: 1; width: 100%; }
+
+/* === AVATAR PAGE === */
+.avatar-page { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+.avatar-container { display: grid; grid-template-columns: 340px 1fr; gap: 24px; }
+.avatar-preview { background: #fff; border: 1px solid #e0e0e0; border-radius: 4px; padding: 16px; }
+.avatar-tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+.avatar-tab {
+  padding: 6px 14px;
+  border: 1px solid #ccc;
+  background: #f2f4f5;
+  cursor: pointer;
+  font-size: 13px;
+  border-radius: 3px;
+  color: #393b3d;
+}
+.avatar-tab.active { background: #393b3d; color: #fff; border-color: #393b3d; }
+.avatar-render-area {
+  background: #e8eaec;
+  border-radius: 4px;
+  min-height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.avatar-render-img { max-height: 310px; max-width: 100%; }
+.avatar-info-bar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #898989;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #e0e0e0;
+}
+.avatar-details { }
+.avatar-section {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.avatar-section-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; color: #393b3d; }
+.color-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.color-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #606162; }
+.color-swatch { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #e0e0e0; }
+.wearing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.wearing-item {
+  background: #f2f4f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wearing-item:hover { border-color: #0074bd; }
+.wearing-item-img { width: 80px; height: 80px; object-fit: contain; }
+@media (max-width: 768px) {
+  .avatar-container { grid-template-columns: 1fr; }
+}

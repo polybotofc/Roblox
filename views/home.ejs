@@ -33,7 +33,7 @@
         <% featuredGames.slice(0, 6).forEach(function(game) { %>
           <div class="featured-card">
             <a href="/games/detail/<%= game.universeId %>" class="featured-card-link">
-              <img src="<%= game.thumbnailUrl %>" alt="<%= game.name %>" class="featured-card-thumb" loading="lazy" onerror="this.src='/images/game-placeholder.png'">
+              <img src="<%= game.thumbnailUrl %>" alt="<%= game.name %>" class="featured-card-thumb" loading="lazy" onerror="this.src='/images/roblox-game-default.svg'">
               <div class="featured-card-info">
                 <div class="featured-card-name"><%= game.name %></div>
                 <div class="featured-card-meta"><%= game.creatorName %> &middot; <span data-format-number><%= game.playing %></span> Playing</div>
@@ -52,7 +52,7 @@
         <% popularGames.forEach(function(game) { %>
           <div class="game-card">
             <a href="/games/detail/<%= game.universeId %>" class="game-card-link">
-              <img src="<%= game.thumbnailUrl %>" alt="<%= game.name %>" class="game-card-thumb" loading="lazy" onerror="this.src='/images/game-placeholder.png'">
+              <img src="<%= game.thumbnailUrl %>" alt="<%= game.name %>" class="game-card-thumb" loading="lazy" onerror="this.src='/images/roblox-game-default.svg'">
               <div class="game-card-info">
                 <div class="game-card-name"><%= game.name %></div>
                 <div class="game-card-creator"><%= game.creatorName %></div>
