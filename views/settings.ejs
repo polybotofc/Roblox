@@ -1,0 +1,132 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="settings-page">
+    <h1 class="section-title" style="margin-bottom:16px">Settings</h1>
+
+    <% if (errors.length > 0) { %>
+      <% errors.forEach(function(err) { %>
+        <div class="alert alert-error"><%= err.msg %></div>
+      <% }); %>
+    <% } %>
+
+    <% if (success) { %>
+      <div class="alert alert-success">
+        <% if (success === 'password') { %>Password updated successfully.
+        <% } else if (success === 'email') { %>Email updated successfully.
+        <% } else if (success === 'bio') { %>Bio updated successfully.
+        <% } else if (success === 'game') { %>Favorite game updated.
+        <% } else if (success === 'privacy') { %>Privacy settings updated.
+        <% } else { %>Settings updated.<% } %>
+      </div>
+    <% } %>
+
+    <div class="settings-container">
+      <nav class="settings-nav">
+        <a href="#password">Password</a>
+        <a href="#email">Email</a>
+        <a href="#bio">Bio</a>
+        <a href="#game">Favorite Game</a>
+        <a href="#privacy">Privacy</a>
+      </nav>
+
+      <div>
+        <!-- Change Password -->
+        <div class="settings-section" id="password">
+          <h2 class="settings-section-title">Change Password</h2>
+          <form method="POST" action="/settings/password">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group">
+              <label class="form-label">Current Password</label>
+              <input type="password" name="currentPassword" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">New Password</label>
+              <input type="password" name="newPassword" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm New Password</label>
+              <input type="password" name="confirmPassword" class="form-input" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Password</button>
+          </form>
+        </div>
+
+        <!-- Change Email -->
+        <div class="settings-section" id="email">
+          <h2 class="settings-section-title">Change Email</h2>
+          <form method="POST" action="/settings/email">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group">
+              <label class="form-label">New Email</label>
+              <input type="email" name="email" class="form-input" value="<%= userInfo.email %>" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Email</button>
+          </form>
+        </div>
+
+        <!-- Change Bio -->
+        <div class="settings-section" id="bio">
+          <h2 class="settings-section-title">Change Bio</h2>
+          <form method="POST" action="/settings/bio">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group">
+              <label class="form-label">Bio (max 500 characters)</label>
+              <textarea name="bio" class="reply-textarea" style="min-height:100px"><%= profile.bio || '' %></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Bio</button>
+          </form>
+        </div>
+
+        <!-- Favorite Game -->
+        <div class="settings-section" id="game">
+          <h2 class="settings-section-title">Favorite Game</h2>
+          <form method="POST" action="/settings/favorite-game">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group">
+              <label class="form-label">Favorite Game</label>
+              <input type="text" name="favorite_game" class="form-input" value="<%= profile.favorite_game || '' %>" placeholder="e.g. Brookhaven">
+            </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+          </form>
+        </div>
+
+        <!-- Privacy -->
+        <div class="settings-section" id="privacy">
+          <h2 class="settings-section-title">Privacy Settings</h2>
+          <form method="POST" action="/settings/privacy">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group">
+              <label class="form-label">Who can see my profile</label>
+              <select name="privacy_profile" class="form-input">
+                <option value="everyone" <%= profile.privacy_profile === 'everyone' ? 'selected' : '' %>>Everyone</option>
+                <option value="friends" <%= profile.privacy_profile === 'friends' ? 'selected' : '' %>>Friends Only</option>
+                <option value="nobody" <%= profile.privacy_profile === 'nobody' ? 'selected' : '' %>>Nobody</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Who can see my online status</label>
+              <select name="privacy_online" class="form-input">
+                <option value="everyone" <%= profile.privacy_online === 'everyone' ? 'selected' : '' %>>Everyone</option>
+                <option value="friends" <%= profile.privacy_online === 'friends' ? 'selected' : '' %>>Friends Only</option>
+                <option value="nobody" <%= profile.privacy_online === 'nobody' ? 'selected' : '' %>>Nobody</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Who can see my friends list</label>
+              <select name="privacy_friends" class="form-input">
+                <option value="everyone" <%= profile.privacy_friends === 'everyone' ? 'selected' : '' %>>Everyone</option>
+                <option value="friends" <%= profile.privacy_friends === 'friends' ? 'selected' : '' %>>Friends Only</option>
+                <option value="nobody" <%= profile.privacy_friends === 'nobody' ? 'selected' : '' %>>Nobody</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Privacy</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

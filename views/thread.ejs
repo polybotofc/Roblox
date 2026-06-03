@@ -1,0 +1,74 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="thread-page">
+    <div class="thread-header">
+      <div style="font-size:12px;color:#898989;margin-bottom:8px">
+        <a href="/forum">Forum</a> &raquo; <a href="/forum/category/<%= thread.category_slug %>"><%= thread.category_name %></a>
+      </div>
+      <h1 class="thread-header-title"><%= thread.title %></h1>
+      <div class="thread-header-meta">
+        by <a href="/profile/<%= thread.username %>"><%= thread.username %></a>
+        &middot; <%= new Date(thread.created_at).toLocaleDateString() %>
+        &middot; <%= thread.views %> views
+      </div>
+    </div>
+
+    <div class="post-list">
+      <% posts.forEach(function(post) { %>
+        <div class="post-item" id="post-<%= post.id %>">
+          <div class="post-user">
+            <img src="<%= post.roblox_avatar_url %>" alt="" class="post-user-avatar">
+            <div class="post-user-name"><a href="/profile/<%= post.username %>"><%= post.username %></a></div>
+            <span class="post-user-role role-<%= post.role %>"><%= post.role %></span>
+            <div class="post-user-posts"><%= post.user_post_count %> posts</div>
+          </div>
+          <div class="post-content">
+            <div class="post-date"><%= new Date(post.created_at).toLocaleString() %></div>
+            <% if (post.quoted_body) { %>
+              <div class="post-quote">
+                <div class="post-quote-author"><%= post.quoted_username %> wrote:</div>
+                <div class="post-quote-text"><%= post.quoted_body.substring(0, 300) %><%= post.quoted_body.length > 300 ? '...' : '' %></div>
+              </div>
+            <% } %>
+            <div class="post-body"><%= post.body %></div>
+            <div class="post-actions">
+              <% if (user) { %>
+                <button class="btn btn-outline btn-sm quote-btn" data-post-id="<%= post.id %>">Quote</button>
+              <% } %>
+              <% if (user && (post.user_id === user.id || ['moderator','administrator','owner'].includes(user.role))) { %>
+                <form method="POST" action="/forum/delete-post/<%= post.id %>" style="display:inline">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <button type="submit" class="btn btn-red btn-sm" onclick="return confirm('Delete this post?')">Delete</button>
+                </form>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+
+    <% if (user && !thread.is_locked) { %>
+      <div class="reply-form">
+        <h3>Reply</h3>
+        <form method="POST" action="/forum/reply/<%= thread.id %>">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <input type="hidden" name="quote_post_id" id="quotePostId" value="">
+          <textarea name="body" class="reply-textarea" placeholder="Write your reply..." required></textarea>
+          <button type="submit" class="btn btn-primary">Post Reply</button>
+        </form>
+      </div>
+    <% } else if (!user) { %>
+      <div class="reply-form" style="text-align:center">
+        <p style="color:#898989">You must be <a href="/auth/login">logged in</a> to reply.</p>
+      </div>
+    <% } else { %>
+      <div class="reply-form" style="text-align:center">
+        <p style="color:#898989">This thread is locked.</p>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

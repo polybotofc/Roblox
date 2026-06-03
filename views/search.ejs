@@ -1,0 +1,87 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="search-page">
+    <h1 class="section-title" style="margin-bottom:16px">Search</h1>
+
+    <div class="search-bar">
+      <form action="/search" method="GET">
+        <input type="text" name="q" class="form-input" placeholder="Search users, games, threads..." value="<%= query %>">
+        <select name="type" class="form-input" style="width:auto">
+          <option value="all" <%= type === 'all' ? 'selected' : '' %>>All</option>
+          <option value="users" <%= type === 'users' ? 'selected' : '' %>>Users</option>
+          <option value="games" <%= type === 'games' ? 'selected' : '' %>>Games</option>
+          <option value="threads" <%= type === 'threads' ? 'selected' : '' %>>Threads</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+    </div>
+
+    <% if (query) { %>
+      <!-- Users -->
+      <% if ((type === 'all' || type === 'users') && users.length > 0) { %>
+        <div class="search-results-section">
+          <h3>Users (<%= users.length %>)</h3>
+          <% users.forEach(function(u) { %>
+            <div class="user-result">
+              <img src="<%= u.roblox_avatar_url %>" alt="" class="user-result-avatar">
+              <a href="/profile/<%= u.username %>" class="user-result-name"><%= u.username %></a>
+              <span style="font-size:12px;color:#898989">Joined <%= new Date(u.created_at).toLocaleDateString() %></span>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+
+      <!-- Games -->
+      <% if ((type === 'all' || type === 'games') && games.length > 0) { %>
+        <div class="search-results-section">
+          <h3>Games (<%= games.length %>)</h3>
+          <div class="game-grid">
+            <% games.forEach(function(game) { %>
+              <div class="game-card">
+                <a href="/games/detail/<%= game.universeId %>" class="game-card-link">
+                  <img src="<%= game.thumbnailUrl %>" alt="<%= game.name %>" class="game-card-thumb" loading="lazy" onerror="this.src='/images/game-placeholder.png'">
+                  <div class="game-card-info">
+                    <div class="game-card-name"><%= game.name %></div>
+                    <div class="game-card-creator"><%= game.creatorName %></div>
+                    <div class="game-card-players">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
+                      <span data-format-number><%= game.playing %></span> Playing
+                    </div>
+                  </div>
+                </a>
+              </div>
+            <% }); %>
+          </div>
+        </div>
+      <% } %>
+
+      <!-- Threads -->
+      <% if ((type === 'all' || type === 'threads') && threads.length > 0) { %>
+        <div class="search-results-section">
+          <h3>Forum Threads (<%= threads.length %>)</h3>
+          <div class="thread-list">
+            <% threads.forEach(function(thread) { %>
+              <a href="/forum/thread/<%= thread.id %>" class="thread-item">
+                <div class="thread-info">
+                  <div class="thread-title-text"><%= thread.title %></div>
+                  <div class="thread-meta">by <%= thread.username %> in <%= thread.category_name %> &middot; <%= new Date(thread.created_at).toLocaleDateString() %></div>
+                </div>
+              </a>
+            <% }); %>
+          </div>
+        </div>
+      <% } %>
+
+      <% if (users.length === 0 && games.length === 0 && threads.length === 0) { %>
+        <div class="empty-state">
+          <h3>No results found</h3>
+          <p>Try a different search term.</p>
+        </div>
+      <% } %>
+    <% } %>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

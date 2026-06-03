@@ -1,0 +1,36 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="forum-page">
+    <div style="font-size:12px;color:#898989;margin-bottom:16px">
+      <a href="/forum">Forum</a> &raquo; <a href="/forum/category/<%= category.slug %>"><%= category.name %></a> &raquo; New Thread
+    </div>
+
+    <h1 class="section-title" style="margin-bottom:16px">New Thread in <%= category.name %></h1>
+
+    <div class="settings-section">
+      <% if (errors.length > 0) { %>
+        <% errors.forEach(function(err) { %>
+          <div class="alert alert-error"><%= err.msg %></div>
+        <% }); %>
+      <% } %>
+
+      <form method="POST" action="/forum/new/<%= category.slug %>">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input type="text" name="title" class="form-input" placeholder="Thread title" value="<%= old.title || '' %>" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Content</label>
+          <textarea name="body" class="reply-textarea" style="min-height:200px" placeholder="Write your post..." required><%= old.body || '' %></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Thread</button>
+        <a href="/forum/category/<%= category.slug %>" class="btn btn-outline" style="margin-left:8px">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

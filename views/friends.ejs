@@ -1,0 +1,73 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="friends-page">
+    <h1 class="section-title" style="margin-bottom:16px">Friends</h1>
+
+    <!-- Friend Requests -->
+    <% if (requests.length > 0) { %>
+      <div class="friends-section">
+        <h2 class="section-title" style="font-size:16px;margin-bottom:12px">Friend Requests (<%= requests.length %>)</h2>
+        <% requests.forEach(function(req) { %>
+          <div class="request-card">
+            <img src="<%= req.roblox_avatar_url %>" alt="<%= req.username %>" class="request-avatar">
+            <a href="/profile/<%= req.username %>" class="request-name"><%= req.username %></a>
+            <div class="request-actions">
+              <form method="POST" action="/friends/accept/<%= req.id %>" style="display:inline">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button type="submit" class="btn btn-green btn-sm">Accept</button>
+              </form>
+              <form method="POST" action="/friends/decline/<%= req.id %>" style="display:inline">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button type="submit" class="btn btn-red btn-sm">Decline</button>
+              </form>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+
+    <!-- Sent Requests -->
+    <% if (sentRequests.length > 0) { %>
+      <div class="friends-section">
+        <h2 class="section-title" style="font-size:16px;margin-bottom:12px">Sent Requests (<%= sentRequests.length %>)</h2>
+        <% sentRequests.forEach(function(req) { %>
+          <div class="request-card">
+            <img src="<%= req.roblox_avatar_url %>" alt="<%= req.username %>" class="request-avatar">
+            <a href="/profile/<%= req.username %>" class="request-name"><%= req.username %></a>
+            <span class="btn btn-gray btn-sm" style="cursor:default">Pending</span>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+
+    <!-- Friends List -->
+    <div class="friends-section">
+      <h2 class="section-title" style="font-size:16px;margin-bottom:12px">All Friends (<%= friends.length %>)</h2>
+      <% if (friends.length > 0) { %>
+        <div class="friends-grid">
+          <% friends.forEach(function(friend) { %>
+            <div style="text-align:center">
+              <a href="/profile/<%= friend.username %>" class="friend-card">
+                <img src="<%= friend.roblox_avatar_url %>" alt="<%= friend.username %>" class="friend-card-avatar">
+                <div class="friend-card-name"><%= friend.username %></div>
+              </a>
+              <form method="POST" action="/friends/remove/<%= friend.id %>" style="margin-top:4px">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button type="submit" class="btn btn-red btn-sm">Remove</button>
+              </form>
+            </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <div class="empty-state">
+          <h3>No friends yet</h3>
+          <p>Search for users and send friend requests!</p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

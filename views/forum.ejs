@@ -1,0 +1,34 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="forum-page">
+    <h1 class="section-title" style="margin-bottom:16px">Forum</h1>
+
+    <div class="forum-category-list">
+      <% categories.forEach(function(cat) { %>
+        <a href="/forum/category/<%= cat.slug %>" class="forum-category-item">
+          <div class="forum-cat-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24"><path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z" fill="currentColor"/></svg>
+          </div>
+          <div class="forum-cat-info">
+            <div class="forum-cat-name"><%= cat.name %></div>
+            <div class="forum-cat-desc"><%= cat.description %></div>
+          </div>
+          <div class="forum-cat-stats">
+            <div>
+              <span class="forum-cat-stat-value"><%= cat.thread_count %></span>
+              <span class="forum-cat-stat-label">Threads</span>
+            </div>
+            <div>
+              <span class="forum-cat-stat-value"><%= cat.post_count %></span>
+              <span class="forum-cat-stat-label">Posts</span>
+            </div>
+          </div>
+        </a>
+      <% }); %>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,127 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div id="mobileMenu" class="mobile-menu">
+  <div class="mobile-search">
+    <form action="/search" method="GET" class="search-form"><input type="text" name="q" placeholder="Search" class="search-input"></form>
+  </div>
+  <a href="/">Home</a>
+  <a href="/games">Games</a>
+  <a href="/forum">Forum</a>
+  <a href="/news">News</a>
+  <% if (user) { %>
+    <a href="/friends">Friends</a>
+    <a href="/messages">Messages</a>
+    <a href="/profile/<%= user.username %>">My Profile</a>
+    <a href="/settings">Settings</a>
+    <a href="/auth/logout">Logout</a>
+  <% } else { %>
+    <a href="/auth/login">Login</a>
+    <a href="/auth/register">Sign Up</a>
+  <% } %>
+</div>
+
+<div class="main-content">
+  <div class="home-container">
+    <div class="home-main">
+      <!-- Featured Games -->
+      <div class="section-header">
+        <h2 class="section-title">Featured</h2>
+        <a href="/games?category=featured" class="section-see-all">See All</a>
+      </div>
+      <div class="featured-grid">
+        <% featuredGames.slice(0, 6).forEach(function(game) { %>
+          <div class="featured-card">
+            <a href="/games/detail/<%= game.universeId %>" class="featured-card-link">
+              <img src="<%= game.thumbnailUrl %>" alt="<%= game.name %>" class="featured-card-thumb" loading="lazy" onerror="this.src='/images/game-placeholder.png'">
+              <div class="featured-card-info">
+                <div class="featured-card-name"><%= game.name %></div>
+                <div class="featured-card-meta"><%= game.creatorName %> &middot; <span data-format-number><%= game.playing %></span> Playing</div>
+              </div>
+            </a>
+          </div>
+        <% }); %>
+      </div>
+
+      <!-- Popular Games -->
+      <div class="section-header">
+        <h2 class="section-title">Popular</h2>
+        <a href="/games?category=popular" class="section-see-all">See All</a>
+      </div>
+      <div class="game-grid">
+        <% popularGames.forEach(function(game) { %>
+          <div class="game-card">
+            <a href="/games/detail/<%= game.universeId %>" class="game-card-link">
+              <img src="<%= game.thumbnailUrl %>" alt="<%= game.name %>" class="game-card-thumb" loading="lazy" onerror="this.src='/images/game-placeholder.png'">
+              <div class="game-card-info">
+                <div class="game-card-name"><%= game.name %></div>
+                <div class="game-card-creator"><%= game.creatorName %></div>
+                <div class="game-card-players">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
+                  <span data-format-number><%= game.playing %></span> Playing
+                </div>
+              </div>
+            </a>
+          </div>
+        <% }); %>
+      </div>
+
+      <!-- News -->
+      <% if (news.length > 0) { %>
+        <div class="section-header">
+          <h2 class="section-title">Latest News</h2>
+          <a href="/news" class="section-see-all">See All</a>
+        </div>
+        <div class="news-list">
+          <% news.forEach(function(item) { %>
+            <a href="/news/view/<%= item.id %>" class="news-item">
+              <span class="news-item-badge badge-<%= item.category %>"><%= item.category %></span>
+              <div class="news-item-content">
+                <div class="news-item-title"><%= item.title %></div>
+                <div class="news-item-date">by <%= item.username %> &middot; <%= new Date(item.created_at).toLocaleDateString() %></div>
+              </div>
+            </a>
+          <% }); %>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="home-sidebar">
+      <% if (user) { %>
+        <div class="user-info-card">
+          <div class="user-info-header">
+            <img src="<%= user.roblox_avatar_url %>" alt="Avatar" class="user-info-avatar">
+            <div>
+              <div class="user-info-name"><%= user.username %></div>
+              <div style="font-size:12px;color:#898989">@<%= user.roblox_username %></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:12px">
+            <a href="/profile/<%= user.username %>" class="btn btn-primary btn-sm btn-full">My Profile</a>
+          </div>
+        </div>
+      <% } else { %>
+        <div class="user-info-card">
+          <h3 style="font-size:16px;font-weight:700;margin-bottom:8px">Welcome to Roblox!</h3>
+          <p style="font-size:13px;color:#898989;margin-bottom:12px">Join our community platform.</p>
+          <a href="/auth/register" class="btn btn-green btn-full" style="margin-bottom:8px">Sign Up</a>
+          <a href="/auth/login" class="btn btn-outline btn-full">Login</a>
+        </div>
+      <% } %>
+
+      <div class="stats-card">
+        <h3>Community Stats</h3>
+        <div class="stats-row">
+          <span>Members</span>
+          <span class="stats-row-value"><%= stats.users %></span>
+        </div>
+        <div class="stats-row">
+          <span>Forum Threads</span>
+          <span class="stats-row-value"><%= stats.threads %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

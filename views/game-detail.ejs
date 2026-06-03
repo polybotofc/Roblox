@@ -1,0 +1,85 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="game-detail-page">
+    <div class="game-detail-header">
+      <img src="<%= game.thumbnailUrl %>" alt="<%= game.name %>" class="game-detail-thumb" onerror="this.src='/images/game-placeholder.png'">
+      <div class="game-detail-info">
+        <h1 class="game-detail-title"><%= game.name %></h1>
+        <div class="game-detail-creator">By <a href="#"><%= game.creatorName %></a></div>
+
+        <a href="roblox://placeID=<%= game.placeId %>" class="game-play-btn">
+          <svg width="24" height="24" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+          Play
+        </a>
+
+        <div class="game-stats">
+          <div class="game-stat">
+            <span class="game-stat-value" data-format-number><%= game.playing %></span>
+            <span class="game-stat-label">Active</span>
+          </div>
+          <div class="game-stat">
+            <span class="game-stat-value" data-format-number><%= game.visits %></span>
+            <span class="game-stat-label">Visits</span>
+          </div>
+          <div class="game-stat">
+            <span class="game-stat-value" data-format-number><%= game.favorites %></span>
+            <span class="game-stat-label">Favorites</span>
+          </div>
+          <div class="game-stat">
+            <span class="game-stat-value" data-format-number><%= game.likes %></span>
+            <span class="game-stat-label">Likes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-detail-body">
+      <div>
+        <div class="game-description">
+          <h3>Description</h3>
+          <p><%= game.description || 'No description available.' %></p>
+        </div>
+      </div>
+      <div>
+        <div class="game-sidebar-card">
+          <h4>Game Info</h4>
+          <div class="game-sidebar-row">
+            <span>Creator</span>
+            <span><%= game.creatorName %></span>
+          </div>
+          <div class="game-sidebar-row">
+            <span>Max Players</span>
+            <span><%= game.maxPlayers || 'N/A' %></span>
+          </div>
+          <% if (game.created) { %>
+            <div class="game-sidebar-row">
+              <span>Created</span>
+              <span><%= new Date(game.created).toLocaleDateString() %></span>
+            </div>
+          <% } %>
+          <% if (game.updated) { %>
+            <div class="game-sidebar-row">
+              <span>Updated</span>
+              <span><%= new Date(game.updated).toLocaleDateString() %></span>
+            </div>
+          <% } %>
+        </div>
+        <div class="game-sidebar-card">
+          <h4>Votes</h4>
+          <div class="game-sidebar-row">
+            <span>Likes</span>
+            <span style="color:#02b757" data-format-number><%= game.likes %></span>
+          </div>
+          <div class="game-sidebar-row">
+            <span>Dislikes</span>
+            <span style="color:#e34d4d" data-format-number><%= game.dislikes %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,46 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="main-content">
+  <div class="messages-page">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h1 class="section-title">Messages</h1>
+      <a href="/messages/compose" class="btn btn-primary btn-sm">Compose</a>
+    </div>
+
+    <div class="messages-tabs">
+      <a href="/messages/inbox" class="msg-tab <%= tab === 'inbox' ? 'active' : '' %>">Inbox</a>
+      <a href="/messages/sent" class="msg-tab <%= tab === 'sent' ? 'active' : '' %>">Sent</a>
+    </div>
+
+    <% if (messages.length > 0) { %>
+      <div class="message-list">
+        <% messages.forEach(function(msg) { %>
+          <a href="/messages/view/<%= msg.id %>" class="message-item <%= (tab === 'inbox' && !msg.is_read) ? 'unread' : '' %>">
+            <% if (tab === 'inbox') { %>
+              <img src="<%= msg.from_avatar %>" alt="" class="msg-avatar">
+              <div class="msg-content">
+                <div class="msg-subject"><%= msg.subject %></div>
+                <div class="msg-from">From: <%= msg.from_username %></div>
+              </div>
+            <% } else { %>
+              <img src="<%= msg.to_avatar %>" alt="" class="msg-avatar">
+              <div class="msg-content">
+                <div class="msg-subject"><%= msg.subject %></div>
+                <div class="msg-from">To: <%= msg.to_username %></div>
+              </div>
+            <% } %>
+            <div class="msg-date"><%= new Date(msg.created_at).toLocaleDateString() %></div>
+          </a>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <div class="empty-state">
+        <h3>No messages</h3>
+        <p><%= tab === 'inbox' ? 'Your inbox is empty.' : 'No sent messages.' %></p>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
